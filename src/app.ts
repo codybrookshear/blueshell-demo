@@ -1,5 +1,5 @@
 import * as Blueshell from 'blueshell';
-import * as readline from 'readline';
+//import * as readline from 'readline';
 
 class AppState implements Blueshell.BlueshellState {
     public value: number = 0;
@@ -46,12 +46,16 @@ let behavior : Blueshell.ParentNode<AppState, AppEvent> = new Blueshell.Selector
 			)
     ])
 
-// run-time error with this line. The ParentNode automatically gets registered for debug it seems
-// Blueshell.Action.registerNodeForDebug(behavior);
+
 
 // debug server runs on ws://localhost:8990 (not for human consumption)
-Blueshell.NodeManager.reset();
-Blueshell.NodeManager.getInstance().runServer();
+//Blueshell.NodeManager.reset();
+
+// run-time error with this line. The ParentNode automatically gets registered for debug it seems
+//Blueshell.Action.registerNodeForDebug(behavior);
+
+//Blueshell.NodeManager.getInstance().addNode(behavior);
+//Blueshell.NodeManager.getInstance().runServer();
 
 // log events
 let lastPublishStr = "";
@@ -68,24 +72,26 @@ const publisher = {
 } as Blueshell.TreePublisher<any, any>;
 
 Blueshell.Action.registerTreePublisher(publisher);
+state.value = Math.random();
+const res = behavior.handleEvent(state, new AppEvent('valueChanged'));
 
 // each key press on stdin simulates a state change
-readline.emitKeypressEvents(process.stdin);
-handleInput();
+//readline.emitKeypressEvents(process.stdin);
+//handleInput();
 
-function handleInput()
-{
-    if (process.stdin.isTTY)
-        process.stdin.setRawMode(true);
+// function handleInput()
+// {
+//     if (process.stdin.isTTY)
+//         process.stdin.setRawMode(true);
 
-    process.stdin.on('keypress', (str: string, key: any) => {
+//     process.stdin.on('keypress', (str: string, key: any) => {
 
-        if (key && key.ctrl && key.name == 'c')
-        {
-            process.kill(process.pid, 'SIGINT');
-        }
+//         if (key && key.ctrl && key.name == 'c')
+//         {
+//             process.kill(process.pid, 'SIGINT');
+//         }
 
-        state.value = Math.random();
-        const res = behavior.handleEvent(state, new AppEvent('valueChanged'));
-    });
-}
+//         state.value = Math.random();
+//         const res = behavior.handleEvent(state, new AppEvent('valueChanged'));
+//     });
+// }
