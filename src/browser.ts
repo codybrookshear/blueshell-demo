@@ -1,72 +1,13 @@
-import * as Blueshell from 'blueshell';
+import { BehaviorTreeRunner } from './behavior-tree';
 
-class AppState implements Blueshell.BlueshellState {
-    public value: number = 0;
-	public success: boolean = false;
-	public errorReason?: Error;
-	public __blueshell: any;
-}
-
-class AppEvent {
-    constructor(public desc: string = "") {}
-}
-
-export type AppAction = Blueshell.BaseNode<AppState, AppEvent>;
-
-const successAction = new (class extends Blueshell.Action<AppState, AppEvent> {
-    onEvent(state: AppState) {
-        state.success = true;
-
-        return Blueshell.rc.SUCCESS;
-    }
-})();
-
-const failureAction = new (class extends Blueshell.Action<AppState, AppEvent> {
-    onEvent(state: AppState) {
-        state.success = false;
-
-        return Blueshell.rc.FAILURE;
-    }
-})();
-
-
-const state = new AppState();
-
-let behavior : Blueshell.ParentNode<AppState, AppEvent> = new Blueshell.Selector<AppState, AppEvent>('baseNode', [
-    new Blueshell.IfElse('testIfElse',
-		(state) => {
-            return (state.value > 0.5)
-        },
-		successAction,
-		failureAction
-	)
-]);
-
-
-// log events
-let lastPublishStr = "";
-const publisher = {
-    publishResult(_state: any, _event: any, _topLevel: boolean ) {
-        // we get a separate event for each variable that changes in _state!
-        const newStr = _event.desc + ": " + _state.value + " " + _state.success;
-        if (lastPublishStr !== newStr) {
-            console.log(newStr);
-            lastPublishStr = newStr;
-        }
-    },
-    configure(_options: object) {},
-} as Blueshell.TreePublisher<any, any>;
-
-Blueshell.Action.registerTreePublisher(publisher);
-state.value = Math.random();
-const res = behavior.handleEvent(state, new AppEvent('valueChanged'));
+const btr = new BehaviorTreeRunner();
 
 document.body.appendChild(content());
 
 function content() {
     const element = document.createElement('div');
     const btn = document.createElement('button');
-    btn.innerHTML = 'Click me and check the console';
+    btn.innerHTML = 'Keep clicking me and check the dev console';
     btn.onclick = btnOnClick;
     element.appendChild(btn);
 
@@ -74,6 +15,5 @@ function content() {
 }
 
 function btnOnClick() {
-    state.value = Math.random();
-    const res = behavior.handleEvent(state, new AppEvent('valueChanged'));  
+    btr.dataReceived(Math.random());
 }
