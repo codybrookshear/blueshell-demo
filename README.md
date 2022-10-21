@@ -21,7 +21,7 @@ npm run build
 
 * Clicking the button will trigger a `valueChanged` event.
 
-![blueshell-demo in browser](doc/output.gif)
+![blueshell-demo in browser](doc/browser.gif)
 
 ## Node.js sample
 
