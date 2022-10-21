@@ -11,8 +11,6 @@ class AppEvent {
     constructor(public desc: string = "") {}
 }
 
-//interface AppAction extends Blueshell.Action<AppState, AppEvent> {};
-
 export type AppAction = Blueshell.BaseNode<AppState, AppEvent>;
 
 const successAction = new (class extends Blueshell.Action<AppState, AppEvent> {
@@ -79,24 +77,3 @@ function btnOnClick() {
     state.value = Math.random();
     const res = behavior.handleEvent(state, new AppEvent('valueChanged'));  
 }
-
-// each key press on stdin simulates a state change
-// readline.emitKeypressEvents(process.stdin);
-// handleInput();
-
-// function handleInput()
-// {
-//     if (process.stdin.isTTY)
-//         process.stdin.setRawMode(true);
-
-//     process.stdin.on('keypress', (str: string, key: any) => {
-
-//         if (key && key.ctrl && key.name == 'c')
-//         {
-//             process.kill(process.pid, 'SIGINT');
-//         }
-
-//         state.value = Math.random();
-//         const res = behavior.handleEvent(state, new AppEvent('valueChanged'));
-//     });
-// }

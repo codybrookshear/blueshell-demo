@@ -12,8 +12,6 @@ class AppEvent {
     constructor(public desc: string = "") {}
 }
 
-//interface AppAction extends Blueshell.Action<AppState, AppEvent> {};
-
 export type AppAction = Blueshell.BaseNode<AppState, AppEvent>;
 
 const successAction = new (class extends Blueshell.Action<AppState, AppEvent> {
