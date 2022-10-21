@@ -1,10 +1,8 @@
 import * as Blueshell from 'blueshell';
-//import * as readline from 'readline';
 
 class AppState implements Blueshell.BlueshellState {
     public value: number = 0;
 	public success: boolean = false;
-	public failure: boolean = false;
 	public errorReason?: Error;
 	public __blueshell: any;
 }
@@ -27,7 +25,7 @@ const successAction = new (class extends Blueshell.Action<AppState, AppEvent> {
 
 const failureAction = new (class extends Blueshell.Action<AppState, AppEvent> {
     onEvent(state: AppState) {
-        state.failure = true;
+        state.success = false;
 
         return Blueshell.rc.FAILURE;
     }
@@ -38,24 +36,14 @@ const state = new AppState();
 
 let behavior : Blueshell.ParentNode<AppState, AppEvent> = new Blueshell.Selector<AppState, AppEvent>('baseNode', [
     new Blueshell.IfElse('testIfElse',
-				(state) => {
-                    return (state.value > 0.5)
-                },
-				successAction,
-				//failureAction
-			)
-    ])
+		(state) => {
+            return (state.value > 0.5)
+        },
+		successAction,
+		failureAction
+	)
+]);
 
-
-
-// debug server runs on ws://localhost:8990 (not for human consumption)
-//Blueshell.NodeManager.reset();
-
-// run-time error with this line. The ParentNode automatically gets registered for debug it seems
-//Blueshell.Action.registerNodeForDebug(behavior);
-
-//Blueshell.NodeManager.getInstance().addNode(behavior);
-//Blueshell.NodeManager.getInstance().runServer();
 
 // log events
 let lastPublishStr = "";
@@ -75,9 +63,26 @@ Blueshell.Action.registerTreePublisher(publisher);
 state.value = Math.random();
 const res = behavior.handleEvent(state, new AppEvent('valueChanged'));
 
+document.body.appendChild(content());
+
+function content() {
+    const element = document.createElement('div');
+    const btn = document.createElement('button');
+    btn.innerHTML = 'Click me and check the console';
+    btn.onclick = btnOnClick;
+    element.appendChild(btn);
+
+    return element;
+}
+
+function btnOnClick() {
+    state.value = Math.random();
+    const res = behavior.handleEvent(state, new AppEvent('valueChanged'));  
+}
+
 // each key press on stdin simulates a state change
-//readline.emitKeypressEvents(process.stdin);
-//handleInput();
+// readline.emitKeypressEvents(process.stdin);
+// handleInput();
 
 // function handleInput()
 // {
