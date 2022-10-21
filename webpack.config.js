@@ -2,10 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-module.exports = {
-  entry: {
-    app: './src/app.ts'
-  },
+const generalConfig = {
   mode: 'development',
   devtool: 'eval-source-map',
   module: {
@@ -19,7 +16,7 @@ module.exports = {
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
-    fallback: { 
+    fallback : { 
         "util": require.resolve("util/"),
         "inspector": false 
     },
@@ -27,14 +24,31 @@ module.exports = {
   output: {
     filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'dist'),
-    clean: true,
   },
-  plugins: [
-    new webpack.ProvidePlugin({
-        process: 'process/browser',
-    }),
-    new HtmlWebpackPlugin({
-        title: 'Blueshell Demo',
-    })
-  ],
 };
+
+const nodeConfig = {
+    entry: { node: './src/node.ts' },
+    target: 'node',
+};
+
+const browserConfig = {
+    entry: { browser: './src/browser.ts' },
+    target: 'web',
+    plugins: [
+        new webpack.ProvidePlugin({
+            process: 'process/browser',
+        }),
+        new HtmlWebpackPlugin({
+            title: 'Blueshell Demo',
+        })
+    ],
+    output: {
+        clean: true
+    },
+};
+
+Object.assign(nodeConfig, generalConfig);
+Object.assign(browserConfig, generalConfig);
+
+module.exports = [nodeConfig, browserConfig];
