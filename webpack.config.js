@@ -32,8 +32,22 @@ const nodeConfig = {
     target: 'node',
 };
 
+const webworkerConfig = {
+    entry: { 
+        'behavior-tree': './src/behavior-tree.ts',
+    },
+    target: 'webworker',
+    plugins: [
+        new webpack.ProvidePlugin({
+            process: 'process/browser',
+        }),
+    ],
+};
+
 const browserConfig = {
-    entry: { browser: './src/browser.ts' },
+    entry: { 
+        browser: './src/browser.ts',
+    },
     target: 'web',
     plugins: [
         new webpack.ProvidePlugin({
@@ -50,5 +64,6 @@ const browserConfig = {
 
 Object.assign(nodeConfig, generalConfig);
 Object.assign(browserConfig, generalConfig);
+Object.assign(webworkerConfig, generalConfig);
 
-module.exports = [nodeConfig, browserConfig];
+module.exports = [nodeConfig, webworkerConfig, browserConfig];

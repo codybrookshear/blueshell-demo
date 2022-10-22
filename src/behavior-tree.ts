@@ -35,8 +35,10 @@ class ConsolePublisher implements Blueshell.TreePublisher<AppState, AppEvent> {
         // we get a separate event for each variable that changes in _state;
         // but we only log if alarm changed
         if (this.lastAlarm !== _state.alarm) {
-            console.log(_event.desc + ": " + _state.value + " " + _state.alarm);
+            //console.log(_event.desc + ": " + _state.value + " " + _state.alarm);
             this.lastAlarm = _state.alarm;
+            //postMessage('SUCCESS');
+            postMessage(_state);
         }
     };
 
@@ -66,4 +68,10 @@ export class BehaviorTreeRunner {
         this.state.value = data;
         this.behavior.handleEvent(this.state, new AppEvent('valueChanged'));  
     }
+}
+
+const btr2 = new BehaviorTreeRunner();
+
+onmessage = (e) => {
+    btr2.dataReceived(e.data);
 }
