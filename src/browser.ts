@@ -1,28 +1,10 @@
-//import { BehaviorTreeRunner } from './behavior-tree';
+import { BehaviorTreeRunner } from './behavior-tree';
+import * as browser_common from './browser-common';
 
-//const btr = new BehaviorTreeRunner();
+const btr = new BehaviorTreeRunner();
 
-if (window.Worker) {
-    const myWorker = new Worker('./behavior-tree.bundle.js');
+document.body.appendChild(browser_common.content(btnOnClick));
 
-    document.body.appendChild(content());
-
-    myWorker.onmessage = (e) => {
-        console.log(e);
-    }
-
-    function content() {
-        const element = document.createElement('div');
-        const btn = document.createElement('button');
-        btn.innerHTML = 'Keep clicking me and check the dev console';
-        btn.onclick = btnOnClick;
-        element.appendChild(btn);
-
-        return element;
-    }
-
-    function btnOnClick() {
-        //btr.dataReceived(Math.random());
-        myWorker.postMessage([Math.random()])
-    }
+function btnOnClick() {
+    btr.dataReceived(Math.random());
 }
