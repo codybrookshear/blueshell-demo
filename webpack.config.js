@@ -129,5 +129,11 @@ module.exports = [
             path: path.resolve(__dirname, 'dist/browser'),
             clean: true,
         },
+        devServer: {  // ONLY PUT IN A SINGLE CONFIG. NOT EACH CONFIG IN modlue.exports array
+            static: {
+              directory: path.join(__dirname, 'dist'),
+            },
+            port: 9000,
+        },
     },
 ];

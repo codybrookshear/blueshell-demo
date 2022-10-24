@@ -20,7 +20,9 @@
   },
   "scripts": {
     "build": "webpack",
-    "start": "node dist/node.bundle.js"
+    "start": "node dist/node.bundle.js",
+    "webpack-serve-browser": "webpack serve --open /browser/",
+    "webpack-serve-webworker": "webpack serve --open /webworker/" 
   },
   "author": "",
   "license": "ISC"
