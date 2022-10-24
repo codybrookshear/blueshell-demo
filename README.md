@@ -35,6 +35,8 @@ npm run install
 npm run webpack-serve-webworker
 ```
 
+* This should cause Chrome to open to the app immediately, which is served at: `http://localhost:9000/webworker/`
+
 
 ## Node.js sample
 

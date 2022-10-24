@@ -7,18 +7,44 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Run app",
+            "name": "Run node.js app",
             "skipFiles": [
                 "<node_internals>/**"
             ],
             "program": "${workspaceFolder}/src/app.ts",
             "cwd": "${workspaceFolder}",
-            "preLaunchTask": "tsc: build - tsconfig.json",
+            "preLaunchTask": "webpack",
             "outFiles": [
                 "${workspaceFolder}/dist/**/*.js"
             ],
             "sourceMaps": true,
             "console": "integratedTerminal"
+        },
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Run browser",
+            "url" :"http://localhost:9000/browser/",
+            "outFiles": [
+                "${workspaceFolder}/dist/**/*.js"
+            ],
+            "sourceMaps": true,
+            "webRoot": "${workspaceFolder}/dist",
+            "trace": true,
+            "preLaunchTask": "npm: webpack-serve-browser"
+        },
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Run webworker",
+            "url" :"http://localhost:9000/webworker/",
+            "outFiles": [
+                "${workspaceFolder}/dist/**/*.js"
+            ],
+            "sourceMaps": true,
+            "webRoot": "${workspaceFolder}/dist",
+            "trace": true,
+            "preLaunchTask": "npm: webpack-serve-webworker"
         }
     ]
 }
