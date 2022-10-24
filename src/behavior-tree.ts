@@ -27,7 +27,7 @@ class FailureAction extends Blueshell.Action<AppState, AppEvent> {
     }
 };
 
-class ConsolePublisher implements Blueshell.TreePublisher<AppState, AppEvent> {
+export class ConsolePublisher implements Blueshell.TreePublisher<AppState, AppEvent> {
     
     private lastAlarm = false;
 
@@ -37,6 +37,22 @@ class ConsolePublisher implements Blueshell.TreePublisher<AppState, AppEvent> {
         if (this.lastAlarm !== _state.alarm) {
             console.log(_event.desc + ": " + _state.value + " " + _state.alarm);
             this.lastAlarm = _state.alarm;
+        }
+    };
+
+    configure(_options: object) {};
+};
+
+export class PostPublisher implements Blueshell.TreePublisher<AppState, AppEvent> {
+    
+    private lastAlarm = false;
+
+    publishResult(_state: AppState, _event: AppEvent, _topLevel: boolean ) {
+        // we get a separate event for each variable that changes in _state;
+        // but we only log if alarm changed
+        if (this.lastAlarm !== _state.alarm) {
+            this.lastAlarm = _state.alarm;
+            postMessage([_state, _event]);
         }
     };
 
@@ -56,10 +72,9 @@ export class BehaviorTreeRunner {
         )
     ]);
 
-    publisher = new ConsolePublisher();
+    constructor(publisher : Blueshell.TreePublisher<AppState, AppEvent> = new ConsolePublisher()) {
 
-    constructor() {
-        Blueshell.Action.registerTreePublisher(this.publisher);
+        Blueshell.Action.registerTreePublisher(publisher);
     }
 
     public dataReceived(data: number) {

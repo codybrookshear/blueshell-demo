@@ -2,53 +2,138 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-const generalConfig = {
-  mode: 'development',
-  devtool: 'eval-source-map',
-  module: {
-    rules: [
-      {
-        test: /\.tsx?$/,
-        use: 'ts-loader',
-        exclude: /node_modules/,
-      },
-    ],
-  },
-  resolve: {
-    extensions: ['.tsx', '.ts', '.js'],
-    fallback : { 
-        "util": require.resolve("util/"),
-        "inspector": false 
+module.exports = [
+    
+    {
+        entry: './src/node.ts',
+        target: 'node',
+        mode: 'development',
+        devtool: 'eval-source-map',
+        module: {
+            rules: [
+                {
+                    test: /\.tsx?$/,
+                    use: 'ts-loader',
+                    exclude: /node_modules/,
+                },
+            ],
+        },
+        resolve: {
+            extensions: ['.tsx', '.ts', '.js'],
+            fallback : { 
+                "util": require.resolve("util/"),
+                "inspector": false 
+            },
+        },
+        output: {
+            filename: 'bundle.js',
+            path: path.resolve(__dirname, 'dist/node'),
+            clean: true,
+        },
     },
-  },
-  output: {
-    filename: '[name].bundle.js',
-    path: path.resolve(__dirname, 'dist'),
-  },
-};
-
-const nodeConfig = {
-    entry: { node: './src/node.ts' },
-    target: 'node',
-};
-
-const browserConfig = {
-    entry: { browser: './src/browser.ts' },
-    target: 'web',
-    plugins: [
-        new webpack.ProvidePlugin({
-            process: 'process/browser',
-        }),
-        new HtmlWebpackPlugin({
-            title: 'Blueshell Demo',
-        })
-    ],
-    output: {
-        clean: true
+    {
+        entry: './src/webworker-worker.ts',
+        target: 'webworker',
+        plugins: [
+            new webpack.ProvidePlugin({
+                process: 'process/browser',
+            }),
+        ],
+        mode: 'development',
+        devtool: 'eval-source-map',
+        module: {
+            rules: [
+                {
+                    test: /\.tsx?$/,
+                    use: 'ts-loader',
+                    exclude: /node_modules/,
+                },
+            ],
+        },
+        resolve: {
+            extensions: ['.tsx', '.ts', '.js'],
+            fallback : { 
+                "util": require.resolve("util/"),
+                "inspector": false 
+            },
+        },
+        output: {
+            filename: 'worker-bundle.js',
+            path: path.resolve(__dirname, 'dist/webworker'),
+            //clean: true,
+        },
     },
-};
-
-Object.assign(nodeConfig, generalConfig);
-Object.assign(browserConfig, generalConfig);
-
-module.exports = [nodeConfig, browserConfig];
+    {
+        entry: './src/webworker-browser.ts',
+        target: 'web',
+        plugins: [
+            new HtmlWebpackPlugin({
+                title: 'Blueshell Webworker Demo',
+            }),
+        ],
+        mode: 'development',
+        devtool: 'eval-source-map',
+        module: {
+            rules: [
+                {
+                    test: /\.tsx?$/,
+                    use: 'ts-loader',
+                    exclude: /node_modules/,
+                },
+            ],
+        },
+        resolve: {
+            extensions: ['.tsx', '.ts', '.js'],
+            fallback : { 
+                "util": require.resolve("util/"),
+                "inspector": false 
+            },
+        },
+        output: {
+            filename: 'bundle.js',
+            path: path.resolve(__dirname, 'dist/webworker'),
+            clean: true,
+        },
+    },
+    {
+        entry: './src/browser.ts',
+        target: 'web',
+        plugins: [
+            new webpack.ProvidePlugin({
+                process: 'process/browser',
+            }),
+            new HtmlWebpackPlugin({
+                title: 'Blueshell Demo',
+            })
+        ],
+        mode: 'development',
+        devtool: 'eval-source-map',
+        module: {
+            rules: [
+                {
+                    test: /\.tsx?$/,
+                    use: 'ts-loader',
+                    exclude: /node_modules/,
+                },
+            ],
+        },
+        resolve: {
+            extensions: ['.tsx', '.ts', '.js'],
+            fallback : { 
+                "util": require.resolve("util/"),
+                "inspector": false 
+            },
+        },
+        output: {
+            filename: 'bundle.js',
+            path: path.resolve(__dirname, 'dist/browser'),
+            clean: true,
+        },
+        devServer: {  // ONLY PUT IN A SINGLE CONFIG. NOT EACH CONFIG IN modlue.exports array
+            static: {
+              directory: path.join(__dirname, 'dist'),
+            },
+            port: 9000,
+        },
+    },
+];

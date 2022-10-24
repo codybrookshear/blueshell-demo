@@ -1,18 +1,9 @@
 import { BehaviorTreeRunner } from './behavior-tree';
+import * as browser_common from './browser-common';
 
 const btr = new BehaviorTreeRunner();
 
-document.body.appendChild(content());
-
-function content() {
-    const element = document.createElement('div');
-    const btn = document.createElement('button');
-    btn.innerHTML = 'Keep clicking me and check the dev console';
-    btn.onclick = btnOnClick;
-    element.appendChild(btn);
-
-    return element;
-}
+document.body.appendChild(browser_common.content(btnOnClick));
 
 function btnOnClick() {
     btr.dataReceived(Math.random());
