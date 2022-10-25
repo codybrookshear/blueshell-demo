@@ -21,13 +21,13 @@ npm run start-web
 
 * Clicking the button will trigger a `valueChanged` event.
 
-![blueshell-demo in browser](doc/browser.gif)
+![web demo](doc/web.gif)
 
 ## Browser Webworker sample
 
 * Very similar to the single-threaded browser sample above, but this time the behavior tree code runs in a separate [web worker](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers).
 * Code is in [webworker-web.ts](src/webworker-web.ts) and [webworker-worker.ts](src/webworker-worker.ts)
-
+* Clicking the button will trigger a `valueChanged` event, which is displayed on the page this time.
 
 To build and run:
 
@@ -39,6 +39,7 @@ npm run start-webworker
 
 * This should cause Chrome to open to the app immediately, which is served at: `http://localhost:9000/`
 
+![webworker demo](doc/webworker.gif)
 
 ## Node.js sample
 
@@ -57,4 +58,4 @@ npm run start-node
 
 * Press Ctrl-C to exit.
 
-![blueshell-demo in node.js](doc/node.gif)
+![node demo](doc/node.gif)
