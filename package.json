@@ -19,10 +19,12 @@
     "webpack-dev-server": "^4.11.1"
   },
   "scripts": {
-    "build": "webpack",
-    "start": "node dist/node.bundle.js",
-    "webpack-serve-browser": "webpack serve --open /browser/",
-    "webpack-serve-webworker": "webpack serve --open /webworker/" 
+    "build-node": "webpack --config webpack/node.config.js",
+    "build-web": "webpack --config webpack/web.config.js",
+    "build-webworker": "webpack --config webpack/webworker.config.js",
+    "start-node": "node dist/bundle.js",
+    "start-web": "webpack serve --config webpack/web.config.js",
+    "start-webworker": "webpack serve --config webpack/webworker.config.js"
   },
   "author": "",
   "license": "ISC"

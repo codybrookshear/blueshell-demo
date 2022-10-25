@@ -1,9 +1,9 @@
-import * as browser_common from './browser-common';
+import * as web_common from './web-common';
 
 if (window.Worker) {
     const myWorker = new Worker('worker-bundle.js');
 
-    document.body.appendChild(browser_common.content(btnOnClick));
+    document.body.appendChild(web_common.content(btnOnClick));
 
     myWorker.onmessage = (e) => {
         //e.data[0] : AppState, e.data[1] : AppEvent
